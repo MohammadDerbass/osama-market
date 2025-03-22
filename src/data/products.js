@@ -1,7 +1,7 @@
 const products = [
     {
       id: 1,
-      name: " طازج تفاح أحمر",
+      name: "تفاح أحمر",
       price: 10,
       image: "img/apple.jpg",
       category: "الفواكه والخضروات",

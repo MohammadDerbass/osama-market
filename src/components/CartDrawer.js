@@ -4,12 +4,17 @@ import { FaTimes } from "react-icons/fa";
 export default function CartDrawer({ isOpen, onClose }) {
   const { cartItems, removeFromCart } = useCart();
 
-  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 transition-opacity duration-300 ${
-        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        isOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       }`}
     >
       <div
@@ -19,7 +24,11 @@ export default function CartDrawer({ isOpen, onClose }) {
       >
         <div className="p-4 flex justify-between items-center border-b">
           <h2 className="text-xl font-bold">🛒 السلة</h2>
-          <button onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="text-gray-600 hover:text-red-500 text-lg sm:text-xl transition"
+            aria-label="إغلاق"
+          >
             <FaTimes />
           </button>
         </div>
@@ -38,7 +47,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                     </p>
                   </div>
                   <button
-                    className="text-red-500 text-sm"
+                    className="text-red-500 hover:text-red-600 text-xs sm:text-sm transition"
                     onClick={() => removeFromCart(item.id)}
                   >
                     حذف
@@ -51,7 +60,7 @@ export default function CartDrawer({ isOpen, onClose }) {
 
         <div className="p-4 border-t">
           <p className="font-bold">الإجمالي: {total} شيكل</p>
-          <button className="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded">
+          <button className="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded text-sm sm:text-base transition shadow-md">
             إتمام الشراء
           </button>
         </div>

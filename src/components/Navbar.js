@@ -41,11 +41,12 @@ export default function Navbar() {
         <div className="relative">
           <button
             onClick={() => setDrawerOpen(true)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md transition"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full flex items-center gap-2 shadow-md transition text-sm sm:text-base"
           >
             <FaShoppingCart className="text-white text-lg" />
             <span className="hidden md:inline">السلة</span>
           </button>
+
           {cartItems.reduce((acc, item) => acc + item.quantity, 0) > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
               {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
@@ -59,4 +60,3 @@ export default function Navbar() {
     </>
   );
 }
-
