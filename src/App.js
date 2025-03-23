@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import BottomNav from "./components/BottomNav";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import ProductCard from "./components/ProductCard";
 import products from "./data/products";
 import ProductDetails from "./components/ProductDetails";
+import Favorites from "./components/Favorites";
+import CartPage from "./components/CartPage";
+import Account from "./components/Account";
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("الكل");
@@ -59,6 +63,7 @@ export default function App() {
                       />
                     ))}
                   </div>
+                  <BottomNav />
                 </div>
               </div>
             </div>
@@ -67,6 +72,9 @@ export default function App() {
 
         {/* صفحة تفاصيل المنتج */}
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </Router>
   );
