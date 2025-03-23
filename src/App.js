@@ -16,8 +16,18 @@ import Favorites from "./components/Favorites";
 import CartPage from "./components/CartPage";
 import Account from "./components/Account";
 import AnimatedPage from "./components/AnimatedPage";
+import Checkout from "./components/Checkout";
+import Auth from "./components/Auth";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
-function AnimatedRoutes({ filteredProducts, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm }) {
+function AnimatedRoutes({
+  filteredProducts,
+  selectedCategory,
+  setSelectedCategory,
+  searchTerm,
+  setSearchTerm,
+}) {
   const location = useLocation();
 
   return (
@@ -34,8 +44,7 @@ function AnimatedRoutes({ filteredProducts, selectedCategory, setSelectedCategor
                   <div className="p-6 pb-20">
                     <h1 className="text-3xl font-bold mb-4 text-gray-700">
                       🛍️ المنتجات المتوفرة{" "}
-                      {selectedCategory !== "الكل" &&
-                        `- ${selectedCategory}`}
+                      {selectedCategory !== "الكل" && `- ${selectedCategory}`}
                     </h1>
                     <input
                       type="text"
@@ -61,18 +70,56 @@ function AnimatedRoutes({ filteredProducts, selectedCategory, setSelectedCategor
           }
         />
 
-        <Route path="/product/:id" element={
-          <AnimatedPage><ProductDetails /></AnimatedPage>
-        } />
-        <Route path="/favorites" element={
-          <AnimatedPage><Favorites /></AnimatedPage>
-        } />
-        <Route path="/cart" element={
-          <AnimatedPage><CartPage /></AnimatedPage>
-        } />
-        <Route path="/account" element={
-          <AnimatedPage><Account /></AnimatedPage>
-        } />
+        <Route
+          path="/product/:id"
+          element={
+            <AnimatedPage>
+              <ProductDetails />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <AnimatedPage>
+              <Favorites />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <AnimatedPage>
+              <CartPage />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <AnimatedPage>
+              <Account />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <AnimatedPage>
+              <Checkout />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/auth"
+          element={
+            <AnimatedPage>
+              <Auth />
+            </AnimatedPage>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </AnimatePresence>
   );

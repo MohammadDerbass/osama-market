@@ -1,13 +1,22 @@
 import { useCart } from "../context/CartContext";
 import { FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // ✅ استيراد التوجيه
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cartItems, removeFromCart } = useCart();
+  const navigate = useNavigate(); // ✅ استخدم التوجيه
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = () => {
+    onClose(); // ✅ أغلق الدروار أولاً
+    setTimeout(() => {
+      navigate("/checkout"); // ✅ ثم الانتقال لصفحة الدفع
+    }, 300); // ✅ تأخير بسيط عشان الإغلاق يظهر قبل التنقل
+  };
 
   return (
     <div
@@ -60,7 +69,10 @@ export default function CartDrawer({ isOpen, onClose }) {
 
         <div className="p-4 border-t">
           <p className="font-bold">الإجمالي: {total} شيكل</p>
-          <button className="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded text-sm sm:text-base transition shadow-md">
+          <button
+            onClick={handleCheckout}
+            className="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded text-sm sm:text-base transition shadow-md"
+          >
             إتمام الشراء
           </button>
         </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import CartDrawer from "./CartDrawer"; // استدعاء المكون الجديد
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const { cartItems } = useCart();
@@ -36,6 +37,12 @@ export default function Navbar() {
             </a>
           </li>
         </ul>
+        <Link
+  to="/login"
+  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow-md transition"
+>
+  تسجيل الدخول
+</Link>
 
         {/* زر السلة */}
         <div className="relative">
