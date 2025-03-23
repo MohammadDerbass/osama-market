@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import BottomNav from "./components/BottomNav";
-
+import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import ProductCard from "./components/ProductCard";
@@ -10,12 +15,73 @@ import ProductDetails from "./components/ProductDetails";
 import Favorites from "./components/Favorites";
 import CartPage from "./components/CartPage";
 import Account from "./components/Account";
+import AnimatedPage from "./components/AnimatedPage";
+
+function AnimatedRoutes({ filteredProducts, selectedCategory, setSelectedCategory, searchTerm, setSearchTerm }) {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <AnimatedPage>
+              <div className="bg-gray-100 min-h-screen flex flex-row-reverse">
+                <Sidebar onSelectCategory={setSelectedCategory} />
+                <div className="flex-1">
+                  <Navbar />
+                  <div className="p-6 pb-20">
+                    <h1 className="text-3xl font-bold mb-4 text-gray-700">
+                      🛍️ المنتجات المتوفرة{" "}
+                      {selectedCategory !== "الكل" &&
+                        `- ${selectedCategory}`}
+                    </h1>
+                    <input
+                      type="text"
+                      placeholder="ابحث عن منتج..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full mb-6 p-2 border rounded focus:outline-none focus:ring"
+                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                      {filteredProducts.map((product) => (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          showLink
+                        />
+                      ))}
+                    </div>
+                    <BottomNav />
+                  </div>
+                </div>
+              </div>
+            </AnimatedPage>
+          }
+        />
+
+        <Route path="/product/:id" element={
+          <AnimatedPage><ProductDetails /></AnimatedPage>
+        } />
+        <Route path="/favorites" element={
+          <AnimatedPage><Favorites /></AnimatedPage>
+        } />
+        <Route path="/cart" element={
+          <AnimatedPage><CartPage /></AnimatedPage>
+        } />
+        <Route path="/account" element={
+          <AnimatedPage><Account /></AnimatedPage>
+        } />
+      </Routes>
+    </AnimatePresence>
+  );
+}
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("الكل");
-  const [searchTerm, setSearchTerm] = useState(""); // 🔍 البحث
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // 🔍 فلترة المنتجات حسب الفئة + البحث
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "الكل" || product.category === selectedCategory;
@@ -27,55 +93,13 @@ export default function App() {
 
   return (
     <Router>
-      <Routes>
-        {/* الصفحة الرئيسية */}
-        <Route
-          path="/"
-          element={
-            <div className="bg-gray-100 min-h-screen flex flex-row-reverse">
-              {/* Sidebar */}
-              <Sidebar onSelectCategory={setSelectedCategory} />
-
-              <div className="flex-1">
-                <Navbar />
-                <div className="p-6">
-                  <h1 className="text-3xl font-bold mb-4 text-gray-700">
-                    🛍️ المنتجات المتوفرة{" "}
-                    {selectedCategory !== "الكل" && `- ${selectedCategory}`}
-                  </h1>
-
-                  {/* 🔍 حقل البحث */}
-                  <input
-                    type="text"
-                    placeholder="ابحث عن منتج..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full mb-6 p-2 border rounded focus:outline-none focus:ring"
-                  />
-
-                  {/* عرض المنتجات */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredProducts.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        showLink
-                      />
-                    ))}
-                  </div>
-                  <BottomNav />
-                </div>
-              </div>
-            </div>
-          }
-        />
-
-        {/* صفحة تفاصيل المنتج */}
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/account" element={<Account />} />
-      </Routes>
+      <AnimatedRoutes
+        filteredProducts={filteredProducts}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
     </Router>
   );
 }
