@@ -1,10 +1,10 @@
 import { useCart } from "../context/CartContext";
 import { FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // ✅ استيراد التوجيه
+import { useNavigate } from "react-router-dom";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cartItems, removeFromCart } = useCart();
-  const navigate = useNavigate(); // ✅ استخدم التوجيه
+  const navigate = useNavigate(); //
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,

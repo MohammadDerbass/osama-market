@@ -16,7 +16,7 @@ export default function ProductCard({ product, showLink }) {
         <img
           src={product.image}
           alt={product.name}
-          className="h-full object-cover rounded-lg"
+           className="w-full h-40 object-cover rounded-t-xl"
         />
       </div>
       <div className="mt-4">

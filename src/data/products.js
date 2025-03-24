@@ -34,6 +34,13 @@ const products = [
       image: "img/fish_salamon.jpg",
       category: "اللحوم والأسماك",
     },
+    {
+      id: 6,
+      name: " فراولة",
+      price: 10,
+      image: "img/strawberry.jpg",
+      category: "الفواكه والخضروات",
+    },
   ];
   
   export default products;
