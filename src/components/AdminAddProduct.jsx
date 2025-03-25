@@ -11,15 +11,15 @@ export default function AdminAddProduct() {
     name: "",
     price: "",
     category: "",
-    image: null, // تغيير إلى null لأننا سنستخدم Dropzone
+    image: null,
+    imageUrl: "",
   });
 
-  const [newCategory, setNewCategory] = useState("");
-  const [addingNewCategory, setAddingNewCategory] = useState(false);
+  const [useUrl, setUseUrl] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { categories, addCategory } = useCategories();
+  const { categories } = useCategories();
 
   const baseCategories = [
     "الفواكه والخضروات",
@@ -27,7 +27,12 @@ export default function AdminAddProduct() {
     "منتجات الألبان",
     "اللحوم والأسماك",
     "الوجبات الخفيفة",
-    "العناية الشخصية"
+    "العناية الشخصية",
+    "المشروبات",
+    "المنظفات والورقيات",
+    "مستلزمات الأطفال",
+    "المجمدات",
+    "البقالة الجافة"
   ];
 
   const combinedCategories = Array.from(
@@ -43,40 +48,34 @@ export default function AdminAddProduct() {
     setForm({ ...form, image: file });
   };
 
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
 
     try {
-      // إضافة فئة جديدة إذا اختار المستخدم ذلك
-      if (addingNewCategory && newCategory.trim() !== "") {
-        await addCategory(newCategory);
-        form.category = newCategory;
-      }
+      let finalImageUrl = "";
 
-      // رفع الصورة إلى Firebase Storage والحصول على رابطها
-      let imageUrl = "";
-      if (form.image) {
+      if (useUrl && form.imageUrl) {
+        finalImageUrl = form.imageUrl;
+      } else if (form.image) {
         const storageRef = ref(storage, `images/${form.image.name}`);
         const uploadTask = uploadBytesResumable(storageRef, form.image);
-
         await uploadTask;
-
-        imageUrl = await getDownloadURL(storageRef);
+        finalImageUrl = await getDownloadURL(storageRef);
       }
 
       await addDoc(collection(db, "products"), {
         name: form.name,
         price: parseFloat(form.price),
         category: form.category,
-        image: imageUrl, // استخدام رابط الصورة هنا
+        image: finalImageUrl,
       });
 
       setMessage("✅ تم إضافة المنتج بنجاح!");
-      setForm({ name: "", price: "", category: "", image: null });
-      setNewCategory("");
-      setAddingNewCategory(false);
+      setForm({ name: "", price: "", category: "", image: null, imageUrl: "" });
     } catch (error) {
       console.error("Error adding product:", error);
       setMessage("❌ حدث خطأ أثناء الإضافة.");
@@ -84,8 +83,6 @@ export default function AdminAddProduct() {
 
     setLoading(false);
   };
-
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
@@ -100,6 +97,7 @@ export default function AdminAddProduct() {
           required
           className="w-full p-2 border rounded"
         />
+
         <input
           type="number"
           name="price"
@@ -110,48 +108,76 @@ export default function AdminAddProduct() {
           className="w-full p-2 border rounded"
         />
 
-        {!addingNewCategory ? (
-          <select
-            name="category"
-            value={form.category}
-            onChange={(e) => {
-              if (e.target.value === "__new") {
-                setAddingNewCategory(true);
-              } else {
-                setForm({ ...form, category: e.target.value });
-              }
-            }}
-            className="w-full p-2 border rounded"
-            required
-          >
-            <option value="">اختر الفئة</option>
-            {combinedCategories.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat}</option>
-            ))}
-            <option value="__new">➕ أضف فئة جديدة</option>
-          </select>
-        ) : (
-          <input
-            type="text"
-            placeholder="اسم الفئة الجديدة"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            required
-            className="w-full p-2 border rounded"
-          />
-        )}
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        >
+          <option value="">اختر الفئة</option>
+          {combinedCategories.map((cat, idx) => (
+            <option key={idx} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
 
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <p className="text-center">اسحب الصورة هنا أو انقر لاختيار صورة</p>
+        <div className="border p-2 rounded">
+          <label className="block font-semibold mb-1">طريقة إدخال الصورة:</label>
+          <div className="flex gap-4 mb-3">
+            <label>
+              <input
+                type="radio"
+                checked={!useUrl}
+                onChange={() => setUseUrl(false)}
+              />{" "}
+              رفع من الجهاز
+            </label>
+            <label>
+              <input
+                type="radio"
+                checked={useUrl}
+                onChange={() => setUseUrl(true)}
+              />{" "}
+              رابط مباشر
+            </label>
+          </div>
+
+          {!useUrl ? (
+            <div
+              {...getRootProps({
+                className:
+                  "dropzone border p-2 rounded text-center cursor-pointer",
+              })}
+            >
+              <input {...getInputProps()} />
+              <p>اسحب الصورة هنا أو انقر لاختيار صورة</p>
+            </div>
+          ) : (
+            <input
+              type="text"
+              name="imageUrl"
+              placeholder="رابط مباشر للصورة"
+              value={form.imageUrl}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          )}
         </div>
 
-        {form.image && (
+        {(form.image || form.imageUrl) && (
           <div className="text-center mt-2">
-            <p>الصورة المحددة:</p>
+            <p>معاينة الصورة:</p>
             <img
-              src={URL.createObjectURL(form.image)}
-              alt="Selected"
+              src={
+                useUrl
+                  ? form.imageUrl
+                  : form.image
+                  ? URL.createObjectURL(form.image)
+                  : ""
+              }
+              alt="Preview"
               className="max-w-full h-auto mt-2 rounded"
             />
           </div>

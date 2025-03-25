@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import useProducts from '../hooks/useProducts'; // هاد هو الهُوك اللي بنجيب فيه البيانات من Firestore
+import useProducts from '../hooks/useProducts'; // جلب البيانات من Firestore
 
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const products = useProducts(); // جلب البيانات من فايربيز
+  const products = useProducts(); // المنتجات من فايربيز
 
-  // فلترة المنتجات حسب الاسم
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // ترتيب عشوائي للمنتجات إذا ما في بحث، وإلا فلترة حسب الاسم
+  const filteredProducts = searchTerm.trim() === ''
+    ? [...products].sort(() => Math.random() - 0.5)
+    : products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
   return (
     <div className="p-4">
@@ -26,7 +28,7 @@ const ProductList = () => {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-32 object-cover mb-2"
+              className="w-full h-32 object-cover mb-2 rounded"
             />
             <h2 className="font-bold text-lg">{product.name}</h2>
             <p className="text-sm text-gray-600">{product.category}</p>

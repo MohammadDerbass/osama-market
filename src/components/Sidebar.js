@@ -5,9 +5,26 @@ import {
   FaFish,
   FaCookie,
   FaPumpSoap,
+  FaBaby,
+  FaSnowflake,
+  FaWineBottle,
+  FaBroom,
+  FaBox
 } from "react-icons/fa";
 
-import useCategories from "../hooks/useCategories";
+const baseCategories = [
+  "الفواكه والخضروات",
+  "المخبوزات",
+  "منتجات الألبان",
+  "اللحوم والأسماك",
+  "الوجبات الخفيفة",
+  "العناية الشخصية",
+  "المشروبات",
+  "المنظفات والورقيات",
+  "مستلزمات الأطفال",
+  "المجمدات",
+  "البقالة الجافة"
+];
 
 const iconsMap = {
   "الكل": "🛒",
@@ -17,12 +34,15 @@ const iconsMap = {
   "اللحوم والأسماك": <FaFish className="text-blue-400" />,
   "الوجبات الخفيفة": <FaCookie className="text-pink-400" />,
   "العناية الشخصية": <FaPumpSoap className="text-green-400" />,
+  "المشروبات": <FaWineBottle className="text-cyan-400" />, // بديل لـ FaBottleWater
+  "المنظفات والورقيات": <FaBroom className="text-purple-400" />,
+  "مستلزمات الأطفال": <FaBaby className="text-blue-300" />,
+  "المجمدات": <FaSnowflake className="text-sky-400" />,
+  "البقالة الجافة": <FaBox className="text-gray-300" />,
 };
 
 export default function Sidebar({ onSelectCategory }) {
-  const { categories } = useCategories();
-
-  const allCategories = ["الكل", ...categories];
+  const allCategories = ["الكل", ...baseCategories];
 
   return (
     <div className="group w-16 hover:w-64 bg-gradient-to-b from-slate-800 to-gray-900 text-white transition-all duration-300 ease-in-out shadow-xl z-10 overflow-hidden min-h-screen">

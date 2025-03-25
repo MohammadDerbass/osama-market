@@ -16,7 +16,7 @@ export default function ProductCard({ product, showLink }) {
         <img
           src={product.image}
           alt={product.name}
-           className="w-full h-40 object-cover rounded-t-xl"
+          className="w-full h-40 object-cover rounded"
         />
       </div>
       <div className="mt-4">
@@ -34,5 +34,9 @@ export default function ProductCard({ product, showLink }) {
     </div>
   );
 
-  return showLink ? <Link to={`/product/${product.id}`}>{content}</Link> : content;
+  return showLink ? (
+    <Link to={`/product/${product.id}`}>{content}</Link>
+  ) : (
+    content
+  );
 }
