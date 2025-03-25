@@ -12,12 +12,12 @@ export default function Navbar() {
     <>
       <nav className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4 flex justify-between items-center shadow-md">
         <h1 className="text-2xl font-bold flex items-center">
-          🛒 Osama Market
+          🛒 Mohammad Market
         </h1>
 
         <ul className="hidden md:flex space-x-6 text-lg">
           <li>
-            <a href="#" className="hover:text-gray-300">
+            <a href="/src/components/Home.js" className="hover:text-gray-300">
               الرئيسية
             </a>
           </li>

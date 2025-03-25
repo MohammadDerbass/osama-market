@@ -5,7 +5,7 @@ export default function Login() {
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50 px-4">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Welcome to Osama Market
+          Welcome to Mohammad Market
         </h2>
 
         <form className="space-y-4">

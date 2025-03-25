@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import products from '../data/products';
+import useProducts from '../hooks/useProducts'; // هاد هو الهُوك اللي بنجيب فيه البيانات من Firestore
 
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const products = useProducts(); // جلب البيانات من فايربيز
 
+  // فلترة المنتجات حسب الاسم
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );

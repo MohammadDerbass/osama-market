@@ -10,16 +10,19 @@ import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import ProductCard from "./components/ProductCard";
-import products from "./data/products";
+import useProducts from "./hooks/useProducts";
+import AdminAddProduct from "./components/AdminAddProduct";
 import ProductDetails from "./components/ProductDetails";
 import Favorites from "./components/Favorites";
 import CartPage from "./components/CartPage";
 import Account from "./components/Account";
+import Home from "./components/Home";
 import AnimatedPage from "./components/AnimatedPage";
 import Checkout from "./components/Checkout";
 import Auth from "./components/Auth";
 import Login from "./components/Login";
 import Register from "./components/Register";
+
 
 function AnimatedRoutes({
   filteredProducts,
@@ -29,6 +32,7 @@ function AnimatedRoutes({
   setSearchTerm,
 }) {
   const location = useLocation();
+  
 
   return (
     <AnimatePresence mode="wait">
@@ -69,7 +73,14 @@ function AnimatedRoutes({
             </AnimatedPage>
           }
         />
-
+        <Route
+          path="/admin/add"
+          element={
+            <AnimatedPage>
+              <AdminAddProduct />
+            </AnimatedPage>
+          }
+        />
         <Route
           path="/product/:id"
           element={
@@ -103,6 +114,14 @@ function AnimatedRoutes({
           }
         />
         <Route
+          path="/home"
+          element={
+            <AnimatedPage>
+              <Home />
+            </AnimatedPage>
+          }
+        />
+        <Route
           path="/checkout"
           element={
             <AnimatedPage>
@@ -129,6 +148,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("الكل");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const products = useProducts(); // ✅ الآن داخل App
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "الكل" || product.category === selectedCategory;
