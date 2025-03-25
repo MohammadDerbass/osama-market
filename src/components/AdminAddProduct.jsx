@@ -3,6 +3,8 @@ import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import useCategories from "../hooks/useCategories";
 import { useDropzone } from "react-dropzone";
+import { storage } from "../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export default function AdminAddProduct() {
   const [form, setForm] = useState({
